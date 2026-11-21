@@ -66,6 +66,16 @@ public class IMController {
             return;
         }
 
+        try {
+            if (IMManager.refreshWindow()) {
+                decisionValid = false;
+                modDisabledApplied = false;
+            }
+        } catch (Throwable t) {
+            hardDisable(t);
+            return;
+        }
+
         if (pollToggleKey()) {
             suspended = !suspended;
             LOG.info("[imblocker] " + (suspended

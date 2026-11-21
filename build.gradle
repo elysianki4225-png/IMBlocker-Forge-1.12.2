@@ -18,3 +18,6 @@ minecraft {
     mappings = 'stable_39'
     runDir = 'run'
 }
+
+// Minecraft 1.12.2 supplies JNA 4.4.0 at runtime; it is not bundled in the mod.
+dependencies { compile 'net.java.dev.jna:jna:4.4.0' }

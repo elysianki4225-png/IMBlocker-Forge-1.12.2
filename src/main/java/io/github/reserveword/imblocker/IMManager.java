@@ -16,7 +16,7 @@ import io.github.reserveword.imblocker.platform.WindowsIMManager;
  *
  * <p>The actual input method manipulation is delegated to a platform backend:
  * <ul>
- *     <li>Windows: inactive until a native IME bridge is implemented.</li>
+ *     <li>Windows: JNA calls to IMM on the Minecraft window thread.</li>
  *     <li>Linux: {@code fcitx5-remote} / {@code fcitx-remote} / {@code ibus}
  *         command line tools, mirroring how the original IMBlocker works.</li>
  *     <li>macOS: not supported yet, see the README (the original implementation
@@ -25,8 +25,7 @@ import io.github.reserveword.imblocker.platform.WindowsIMManager;
  *     <li>Anything else: a no-op backend that logs once and stays out of the way.</li>
  * </ul>
  *
- * <p>All methods here are cheap and non-blocking; native work is dispatched to a
- * background thread so no frame ever waits on the operating system.
+ * <p>Linux commands run on a worker; Windows IMM calls run on the client thread.
  */
 public abstract class IMManager {
 
@@ -87,6 +86,7 @@ public abstract class IMManager {
 
     /** Called from the mod initializer to resolve the backend off the main thread. */
     public static void initAsync() {
+        if (detect() instanceof WindowsIMManager) return;
         WORKER.execute(new Runnable() {
             @Override
             public void run() {
@@ -110,7 +110,12 @@ public abstract class IMManager {
             return;
         }
         lastIMState = Boolean.valueOf(enabled);
+        if (!enabled) lastEnglishState = null;
         final IMManager manager = detect();
+        if (manager instanceof WindowsIMManager) {
+            manager.setIMEnabled(enabled);
+            return;
+        }
         WORKER.execute(new Runnable() {
             @Override
             public void run() {
@@ -134,6 +139,10 @@ public abstract class IMManager {
         }
         lastEnglishState = Boolean.valueOf(english);
         final IMManager manager = detect();
+        if (manager instanceof WindowsIMManager) {
+            manager.setEnglishMode(english);
+            return;
+        }
         WORKER.execute(new Runnable() {
             @Override
             public void run() {
@@ -144,6 +153,16 @@ public abstract class IMManager {
                 }
             }
         });
+    }
+
+    /** Refresh the LWJGL handle on the client thread, including after window recreation. */
+    public static boolean refreshWindow() {
+        IMManager manager = detect();
+        if (manager instanceof WindowsIMManager && ((WindowsIMManager) manager).updateWindow()) {
+            resetCache();
+            return true;
+        }
+        return false;
     }
 
     /** Resets the cached transition state, forcing a fresh evaluation. */

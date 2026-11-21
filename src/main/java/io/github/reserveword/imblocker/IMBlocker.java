@@ -32,8 +32,9 @@ import net.minecraftforge.common.MinecraftForge;
  *         runtime, which makes the produced jar work in development workspaces
  *         and in production without any remapping step.</li>
  *     <li>Input method control is implemented per platform without external
- *         dependencies: {@code fcitx5-remote}/{@code fcitx-remote}/{@code ibus} on Linux.
- *         Windows and macOS are not implemented in this port.
+ *         dependencies: JNA/IMM on Windows and
+ *         {@code fcitx5-remote}/{@code fcitx-remote}/{@code ibus} on Linux.
+ *         macOS is not implemented in this port.
  *         See the platform package.</li>
  * </ul>
  *
