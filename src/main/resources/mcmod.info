@@ -1,0 +1,12 @@
+[{
+  "modid": "imblocker",
+  "name": "IMBlocker",
+  "version": "1.0.0",
+  "mcversion": "1.12.2",
+  "description": "Automatically disables the input method while playing and re-enables it when typing. Inspired by TimmyOVO's InputMethodBlocker; unofficial port of IMBlocker for Minecraft 1.12.2.\n在你不打字的时候自动关闭输入法，打字时自动开启。IMBlocker 至 Minecraft 1.12.2 的非官方移植版。",
+  "url": "https://github.com/elysianki4225-png/IMBlocker-Forge-1.12.2",
+  "authorList": ["reserveword", "LitnhJacuzzi", "Halogly (logo)"],
+  "credits": "Port of reserveword/IMBlocker (GPL-3.0). Original InputMethodBlocker by TimmyOVO. Logo by Halogly.",
+  "logoFile": "imblocker.png",
+  "dependencies": ["required-after:forge@[14.23.5.2860,)"]
+}]

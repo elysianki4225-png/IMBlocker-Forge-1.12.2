@@ -1,0 +1,23 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+    }
+    dependencies { classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT' }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = '1.0.0'
+group = 'io.github.reserveword.imblocker'
+archivesBaseName = 'IMBlocker-Forge-1.12.2'
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+
+minecraft {
+    version = '1.12.2-14.23.5.2860'
+    mappings = 'stable_39'
+    runDir = 'run'
+}
+
+// Minecraft 1.12.2 supplies JNA 4.4.0 at runtime; it is not bundled in the mod.
+dependencies { compile 'net.java.dev.jna:jna:4.4.0' }
